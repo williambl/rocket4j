@@ -1,6 +1,8 @@
 package com.williambl.demo.rocket4j;
 
-class TrackKey implements Comparable<TrackKey> {
+import java.util.function.DoubleUnaryOperator;
+
+public class TrackKey implements Comparable<TrackKey> {
     /**
      * Interpolation type.
      *
@@ -12,19 +14,29 @@ class TrackKey implements Comparable<TrackKey> {
         /**
          * No interpolation, just steps to next value.
          */
-        STEP,
+        STEP($ -> 0.0),
         /**
          * Linear 
          */
-        LINEAR,
+        LINEAR(t -> t),
         /**
          * Smooth
          */
-        SMOOTH,
+        SMOOTH(t -> t * t * (3 - 2*t)),
         /**
          * Ramp up
          */
-        RAMP
+        RAMP(t -> Math.pow(t, 2.0));
+
+        private final DoubleUnaryOperator function;
+
+        KeyType(DoubleUnaryOperator function) {
+            this.function = function;
+        }
+
+        public double apply(double rawFactor) {
+            return this.function.applyAsDouble(rawFactor);
+        }
     }
 
     private int row;
@@ -90,12 +102,7 @@ class TrackKey implements Comparable<TrackKey> {
     public static double interpolate(TrackKey first, TrackKey second, double row) {
         double t = (row - first.row) / (second.row - first.row);
 
-        t = switch (first.keyType) {
-            case STEP -> 0.0;
-            case SMOOTH -> t * t * (3 - 2*t);
-            case RAMP -> Math.pow(t, 2.0);
-            case LINEAR -> t;
-        };
+        t = first.keyType.apply(t);
 
         return first.value + (second.value - first.value) * t;
     }

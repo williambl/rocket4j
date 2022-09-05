@@ -41,7 +41,7 @@ public class FileConnector implements Connector {
 
             if (keyList.getLength() > 0) {
                 // Create new track
-                Track track = tracks.getOrCreate(trackElement.getAttribute("name"));
+                //Track track = .getOrCreate(trackElement.getAttribute("name"));
                 int totalKeys = keyList.getLength();
 
                 // Add all found keys
@@ -52,7 +52,7 @@ public class FileConnector implements Connector {
                     float value = Float.parseFloat(key.getAttribute("value"));
                     int keyType = Integer.parseInt(key.getAttribute("interpolation"));
 
-                    track.addOrUpdateKey(new TrackKey(row, value, keyType));
+                    //track.addOrUpdateKey(new TrackKey(row, value, keyType));
                 }
 
             }

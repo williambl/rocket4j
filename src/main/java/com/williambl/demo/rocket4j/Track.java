@@ -133,4 +133,28 @@ public class Track {
         // Between two keys: return interpolated value
         return TrackKey.interpolate(this.keys.get(idx), this.keys.get(idx+1), row);
     }
+
+    /**
+     * Returns the closest keys above and below the row given. Result array can have length 0, 1, or 2. Use for custom
+     * interpolation (e.g. rotations)
+     * @param row the row
+     * @return an array of keys for interpolation
+     */
+    public TrackKey[] getKeysForLerp(double row) {
+        if (this.keys.size() == 0) {
+            return new TrackKey[0];
+        }
+
+        int irow = (int) row;
+        int idx = this.getKeyIndex(irow);
+
+        // Before any keys, return 0
+        if (idx == -1) {
+            return new TrackKey[0];
+        } else if (idx == this.keys.size() - 1) { // After last key, return last value
+            return new TrackKey[] { this.keys.get(idx) };
+        }
+
+        return new TrackKey[] { this.keys.get(idx), this.keys.get(idx + 1) };
+    }
 }
