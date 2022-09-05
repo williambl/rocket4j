@@ -1,5 +1,7 @@
 plugins {
     id("java")
+    `java-library`
+    `maven-publish`
 }
 
 group = "com.williambl.demo"
@@ -18,4 +20,23 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("rocket4j") {
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            name = "willBlRepositorySnapshots"
+            url = uri("https://maven.willbl.dev/snapshots")
+            credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
 }
