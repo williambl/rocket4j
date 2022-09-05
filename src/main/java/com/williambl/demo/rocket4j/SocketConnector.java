@@ -101,8 +101,10 @@ public class SocketConnector implements Connector {
     }
 
     @Override
-    public void close() {
-        //TODO
+    public void close() throws IOException {
+        this.in.close();
+        this.out.close();
+        this.socket.close();
     }
 
     private void acceptSetKey() throws IOException {

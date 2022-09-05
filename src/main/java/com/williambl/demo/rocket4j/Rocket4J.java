@@ -56,6 +56,11 @@ public class Rocket4J {
         return new Rocket4J(new SocketConnector(address, port), controller);
     }
 
+
+    public Track getTrack(String name) {
+        return this.tracks.getOrCreate(name);
+    }
+
     public Track getTrack(int trackId) {
         return this.tracks.getById(trackId);
     }
